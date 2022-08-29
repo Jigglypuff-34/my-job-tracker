@@ -1,6 +1,7 @@
 import { initalData } from "./data";
 import React, { useState, useEffect } from "react";
 import { Column } from "./Column";
+import { DragDropContext } from "react-beautiful-dnd";
 
 export function Board() {
   const [data, setData] = useState(initalData);
@@ -19,5 +20,15 @@ export function Board() {
     setColumnArray(tempArray);
   }, []);
 
-  return <>{columnArray}</>;
+  // responsibility of ondragend to synchronously update the state
+  function onDragEnd(result) {
+    // reorder our column
+    
+  }
+
+  return (
+    <>
+      <DragDropContext onDragEnd={onDragEnd}>{columnArray}</DragDropContext>
+    </>
+  );
 }
