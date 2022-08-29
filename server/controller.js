@@ -63,7 +63,7 @@ controller.register = async (req, res, next) => {
 controller.add = async (req, res, next) => {
   try {
     const { position, company, status, user_id } = req.body;  
-    const query = `INSERT INTO jobs (user_id, position, company, status, notes) VALUES ($1, $2, $3, $4, $5) RETURNING *`
+    const query = `INSERT INTO jobs (user_id, position, company, status, note) VALUES ($1, $2, $3, $4, $5) RETURNING *;`
     const params = [user_id, position, company, status, ""];
     const addedJob = await db.query(query, params);  
 
@@ -84,12 +84,13 @@ controller.add = async (req, res, next) => {
 controller.update = async (req, res, next) => {
 	try {
 		const { _id, status } = req.body;
-		const query = `UPDATE jobs SET status = ${status} WHERE _id = ${_id}`;
+		const query = `UPDATE jobs SET status='${status}' WHERE _id = ${_id}`;
     const jobUpdate = await(db.query(query));
     
     return next(); 
   }
 	catch (err) {
+    console.log(err);
 		return next({
       log: 'Error at middleware controller.update',
       status: '501',
@@ -104,8 +105,9 @@ controller.update = async (req, res, next) => {
 controller.delete = async (req, res, next) => {
 	try {
 		const { _id } = req.body;
-		const query = `DELETE FROM jobs WHERE _id = ${id}`;
-
+		const query = `DELETE FROM jobs WHERE _id=${_id}`;
+    const deleted = await db.query(query);
+    console.log(deleted); 
     return next();
   }
 	catch (err) {
@@ -122,7 +124,7 @@ controller.delete = async (req, res, next) => {
   controller.noteUpdate = async (req, res, next) => {
   try {
     const { _id, note } = req.body;
-    const query = `UPDATE jobs SET note = ${note} WHERE _id = ${_id}`;
+    const query = `UPDATE jobs SET note='${note}' WHERE _id =${_id}`;
     const jobUpdate = await(db.query(query));
     
     return next(); 
@@ -142,11 +144,12 @@ controller.delete = async (req, res, next) => {
   controller.noteDelete = async (req, res, next) => {
   try {
     const { _id } = req.body;
-    const query = `DELETE FROM jobs WHERE _id = ${id}`;
+    const query = `DELETE FROM jobs WHERE _id=${_id}`;
 
     return next();
   }
   catch (err) {
+    console.log(err);
     return next({
       log: 'Error at middleware controller.updateDelete',
       status: '501',
