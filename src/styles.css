@@ -1,4 +1,86 @@
-h1 {
-  color: white;
-  background-color: black;
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;1,100;1,300&display=swap');
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: 'Playfair Display', serif;
+}
+
+p,
+span,
+div {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* containers */
+.outer-container {
+  background: #fff;
+  height: 98.5vh;
+  display: grid !important;
+  grid-template-columns: 1fr;
+  grid-template-rows: 80px 1fr 80px;
+  gap: 30px;
+  grid-template-areas:
+    "Header"
+    "Kanban"
+    "Footer";
+  padding: 30px;
+}
+
+.kanban-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 30px;
+  grid-area: Kanban;
+}
+
+.landing-container {
+  display: grid;
+  grid-gap: 30px;
+  grid-area: Kanban;
+}
+
+.kanban-columns {
+  border-left: 1px solid #f0f0f0;
+  border-right: 1px solid #f0f0f0;
+  padding: 0px 20px;
+  text-align: center;
+}
+
+/* cards */
+.kanban-card {
+  border: 1px solid #f3f3f3;
+  height: 125px;
+  padding: 10px;
+  box-shadow: 1px 0px 15px #00000015;
+  border-radius: 15px;
+  text-align: center;
+  display: grid;
+  align-items: center;
+}
+
+/* nav */
+.header {
+  background: #ececec;
+  grid-area: Header;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  border-radius: 15px;
+}
+
+.footer {
+  background: #ececec;
+  grid-area: Footer;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  border-radius: 15px;
+}
+
+/* text styling */
+h2.kanban-title {
+  text-align: center;
 }
