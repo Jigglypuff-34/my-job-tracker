@@ -84,7 +84,7 @@ controller.add = async (req, res, next) => {
 controller.update = async (req, res, next) => {
 	try {
 		const { _id, status } = req.body;
-		const query = `UPDATE jobs SET ${status} WHERE _id = ${_id}`;
+		const query = `UPDATE jobs SET status = ${status} WHERE _id = ${_id}`;
     const jobUpdate = await(db.query(query));
     
     return next(); 
@@ -122,7 +122,7 @@ controller.delete = async (req, res, next) => {
   controller.noteUpdate = async (req, res, next) => {
   try {
     const { _id, note } = req.body;
-    const query = `UPDATE jobs SET ${note} WHERE _id = ${_id}`;
+    const query = `UPDATE jobs SET note = ${note} WHERE _id = ${_id}`;
     const jobUpdate = await(db.query(query));
     
     return next(); 
