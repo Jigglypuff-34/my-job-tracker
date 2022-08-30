@@ -4,11 +4,11 @@ import { Draggable } from "react-beautiful-dnd";
 
 const Container = styled.div`
   border: 1px solid lightgrey;
-  border-radius: 2px;
+  border-radius: 7px;
   padding: 8px;
   margin-bottom: 8px;
   background: ${(props) => {
-    return props.isDragging ? "lightgreen" : "white";
+    return props.isDragging ? "lightblue" : "white";
   }};
   display: flex;
 `;

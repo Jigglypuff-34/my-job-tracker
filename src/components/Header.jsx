@@ -16,20 +16,53 @@ function Header(props) {
           justifyContent: "flex-end",
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            width: "max-content",
-          }}
-        >
-          <Button
-            onClick={() => {
-              props.setOpenModal(true);
+        {props.userLoggedIn && (
+          <Box
+            sx={{
+              display: "flex",
+              width: "max-content",
+              gap: "10px",
             }}
           >
-            Add Job
-          </Button>
-        </Box>
+            <Button
+              sx={{
+                borderRadius: "50px",
+              }}
+              onClick={() => {
+                props.setOpenModal(true);
+              }}
+            >
+              Add Job
+            </Button>
+            <Button
+              sx={{
+                borderRadius: "50px",
+              }}
+            >
+              Logout
+            </Button>
+          </Box>
+        )}
+
+        {!props.userLoggedIn && (
+          <Box
+            sx={{
+              display: "flex",
+              width: "max-content",
+            }}
+          >
+            <Button
+              sx={{
+                borderRadius: "50px",
+              }}
+              onClick={() => {
+                props.setOpenModal(true);
+              }}
+            >
+              Login
+            </Button>
+          </Box>
+        )}
       </Box>
     </Box>
   );
