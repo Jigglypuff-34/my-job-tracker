@@ -4,7 +4,7 @@ const db = require('./models');
 const controller = {};
 
 controller.login = async (req, res, next) => {
-  console.log("logging in from backend");
+  // console.log("logging in from backend");
   try {
     const { email, password } = req.body;
     const query = `SELECT * FROM users WHERE email='${email}';`;
@@ -21,7 +21,7 @@ controller.login = async (req, res, next) => {
       if(match) {
         res.cookie('user_id', user.rows[0]._id); 
         res.locals.user_id = user.rows[0]._id; 
-        console.log("inserted cookie:", req.cookies.user_id);
+        // console.log("inserted cookie:", req.cookies.user_id);
         return next(); 
       }
       else {
@@ -42,7 +42,7 @@ controller.login = async (req, res, next) => {
 
 controller.register = async (req, res, next) => {
   try {
-    console.log('data : ', req.body);
+    // console.log('data : ', req.body);
 		const { name, email, password } = req.body;
 		const query = `INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *`;
     const hashedPW = await bcrypt.hash(password, 10);
@@ -52,7 +52,7 @@ controller.register = async (req, res, next) => {
     return next(); 
   }
 	catch (err) {
-    console.log(err);
+    // console.log(err);
 		return next({
       log: 'Error at middleware controller.register',
       status: '501',
@@ -65,10 +65,10 @@ controller.register = async (req, res, next) => {
 
 controller.getJobs = async (req, res, next) => {
   try { 
-    console.log('COOKIES ', req.cookies.user_id);
+    // console.log('COOKIES ', req.cookies.user_id);
     const query = `SELECT * FROM jobs WHERE user_id='${ res.locals.user_id }';`;
     const jobs = await db.query(query);  
-    console.log('jobs : ', jobs.rows);
+    // console.log('jobs : ', jobs.rows);
     res.locals.jobs = jobs.rows;
     return next(); 
   }
@@ -86,7 +86,7 @@ controller.getJobs = async (req, res, next) => {
 controller.add = async (req, res, next) => {
   try {
     const { position, company, status } = req.body;  
-    console.log("reslocals user_id:", res.locals.user_id); 
+    // console.log("reslocals user_id:", res.locals.user_id); 
     const query = `INSERT INTO jobs (user_id, position, company, status, note) VALUES ($1, $2, $3, $4, $5) RETURNING *;`
     const params = [req.cookies.user_id, position, company, status, ""];
     const addedJob = await db.query(query, params);  
@@ -122,7 +122,6 @@ controller.update = async (req, res, next) => {
       },
     });
 	}
-    
 }
 
 controller.delete = async (req, res, next) => {
@@ -130,7 +129,7 @@ controller.delete = async (req, res, next) => {
 		const { _id } = req.body;
 		const query = `DELETE FROM jobs WHERE _id=${_id}`;
     const deleted = await db.query(query);
-    console.log(deleted); 
+    // console.log(deleted); 
     return next();
   }
 	catch (err) {

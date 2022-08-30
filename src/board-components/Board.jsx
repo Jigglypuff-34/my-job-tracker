@@ -4,6 +4,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { Box } from "@mui/material";
 import { InfoContext } from "../containers/MainContainer.jsx";
+import axios from "axios";
 
 const Container = styled.div``;
 
@@ -88,6 +89,11 @@ export function Board() {
         ...userInfo,
         application_data: newData,
       });
+      // console.log("board:", finishTaskIds[0], newFinish.title); 
+      // axios.put("/update", {
+      //   _id: finishTaskIds[0],
+      //   status: newFinish.title
+      // })
     }
   }
 
