@@ -90,10 +90,10 @@ export function Board() {
         application_data: newData,
       });
       // console.log("board:", finishTaskIds[0], newFinish.title); 
-      // axios.put("/update", {
-      //   _id: finishTaskIds[0],
-      //   status: newFinish.title
-      // })
+      axios.put("/update", {
+        _id: finishTaskIds[0],
+        status: newFinish.title
+      })
     }
   }
 

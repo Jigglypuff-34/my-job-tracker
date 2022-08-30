@@ -139,7 +139,6 @@ function MainContainer() {
       const interviewArray = [];
       const offerArray = [];
       const rejectedArray = [];
-      console.log(result);
       result.data.forEach((jobs) => {
         const { _id, company, position, note, status } = jobs;
         jobsParsed[_id] = {
@@ -154,7 +153,7 @@ function MainContainer() {
         } else if (status === "Applied") {
           appliedArray.push(_id);
         } else if (status === "Interview") {
-          interviewArray.push("_id");
+          interviewArray.push(_id);
         } else if (status === "Offer") {
           offerArray.push(_id);
         } else if (status === "Rejected") {
