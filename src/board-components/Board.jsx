@@ -18,7 +18,7 @@ const COLUMN_NAMES = [
 export function Board() {
   const [userInfo, setUserInfo] = useContext(InfoContext);
   const [data, setData] = useState(userInfo.application_data);
-
+  const [columnArray, setColumnArray] = useState([]);
   // update order once dragging ends
   function onDragEnd(result) {
     document.body.style.color = "inherit";
@@ -56,6 +56,10 @@ export function Board() {
         },
       };
       setData(newData);
+      setUserInfo({
+        ...userInfo,
+        application_data: newData,
+      });
     } else {
       const startTaskIds = Array.from(start.companyIds);
       startTaskIds.splice(source.index, 1);
@@ -80,8 +84,16 @@ export function Board() {
         },
       };
       setData(newData);
+      setUserInfo({
+        ...userInfo,
+        application_data: newData,
+      });
     }
   }
+
+  useEffect(() => {
+    setData(userInfo.application_data);
+  }, [useContext(InfoContext).application_data]);
 
   return (
     <>

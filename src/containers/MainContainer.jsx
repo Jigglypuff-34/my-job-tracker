@@ -24,7 +24,7 @@ function MainContainer() {
   const [company, setCompany] = useState("");
   const [position, setPosition] = useState("");
 
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const [userInfo, setUserInfo] = useState({
     logged_in: true,
     user_name: "",
@@ -72,6 +72,20 @@ function MainContainer() {
     },
   });
 
+  function updateJobs() {
+    const tempInfo = userInfo;
+    tempInfo.application_data.jobs["company-3"] = {
+      id: "company-3",
+      content: company,
+    };
+
+    for (let col in tempInfo.application_data.columns) {
+      if (tempInfo.application_data.columns[col].title === status) {
+        tempInfo.application_data.columns[col].companyIds.push("company-3");
+      }
+    }
+  }
+
   function updateSelection(event) {
     setStatus(event.target.value);
   }
@@ -83,8 +97,6 @@ function MainContainer() {
   function updatePosition(event) {
     setPosition(event.target.value);
   }
-
-  useEffect(() => console.log("Current State", userInfo), [userInfo]);
 
   return (
     <InfoContext.Provider value={[userInfo, setUserInfo]}>
@@ -170,7 +182,7 @@ function MainContainer() {
               justifyContent: "center",
             }}
           >
-            <Button>Create</Button>
+            <Button onClick={updateJobs}>Create</Button>
           </Box>
         </Box>
       </Modal>

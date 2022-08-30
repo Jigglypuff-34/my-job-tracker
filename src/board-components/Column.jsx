@@ -12,6 +12,7 @@ const Container = styled.div`
 `;
 const Title = styled.h3`
   padding: 8px;
+  font-family: Roboto;
 `;
 const CompanyList = styled.div`
   padding: 8px;
