@@ -85,3 +85,17 @@ div {
 h2.kanban-title {
   text-align: center;
 }
+
+/* styling to add position to kanban*/
+.kanban-add-job-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kanban-add-job-box {
+  width: 400px;
+  height: 50%;
+  background: white;
+  border-radius: 20px;
+}

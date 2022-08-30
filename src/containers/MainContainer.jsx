@@ -1,6 +1,16 @@
 /* eslint-disable linebreak-style */
 import React, { useState, useEffect, createContext } from "react";
-import { Grid, AppBar } from "@mui/material";
+import {
+  Grid,
+  Modal,
+  Box,
+  Typography,
+  TextField,
+  Select,
+  MenuItem,
+  Button,
+} from "@mui/material";
+import CancelIcon from "@mui/icons-material/Cancel";
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
 import Landing from "../components/Landing.jsx";
@@ -10,6 +20,11 @@ import "../styles.css";
 export const InfoContext = createContext();
 
 function MainContainer() {
+  const [status, setStatus] = useState("");
+  const [company, setCompany] = useState("");
+  const [position, setPosition] = useState("");
+
+  const [openModal, setOpenModal] = useState(true);
   const [userInfo, setUserInfo] = useState({
     logged_in: true,
     user_name: "",
@@ -57,10 +72,108 @@ function MainContainer() {
     },
   });
 
+  function updateSelection(event) {
+    setStatus(event.target.value);
+  }
+
+  function updateCompany(event) {
+    setCompany(event.target.value);
+  }
+
+  function updatePosition(event) {
+    setPosition(event.target.value);
+  }
+
   useEffect(() => console.log("Current State", userInfo), [userInfo]);
 
   return (
     <InfoContext.Provider value={[userInfo, setUserInfo]}>
+      <Modal className="kanban-add-job-modal" open={openModal}>
+        <Box className="kanban-add-job-box">
+          <Box
+            sx={{
+              height: "10%",
+              display: "flex",
+              width: "100%",
+              justifyContent: "flex-end",
+            }}
+          >
+            <CancelIcon
+              sx={{
+                marginRight: "10px",
+                marginTop: "10px",
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              }}
+              onClick={() => {
+                setOpenModal(false);
+              }}
+            ></CancelIcon>
+          </Box>
+          <Box
+            sx={{
+              height: "85%",
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="h5">Add Application</Typography>
+            <Box
+              sx={{
+                height: "100%",
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "5px",
+              }}
+            >
+              <TextField
+                sx={{
+                  width: "90%",
+                }}
+                label="Company"
+                variant="outlined"
+                onChange={updateCompany}
+              ></TextField>
+              <TextField
+                sx={{
+                  width: "90%",
+                }}
+                label="Position"
+                variant="outlined"
+                onChange={updatePosition}
+              ></TextField>
+              <Select
+                sx={{
+                  width: "90%",
+                }}
+                value={status}
+                onChange={updateSelection}
+              >
+                <MenuItem value="Wish List">Wish List</MenuItem>
+                <MenuItem value="Applied">Applied</MenuItem>
+                <MenuItem value="Interview">Interview</MenuItem>
+                <MenuItem value="Offer">Offer</MenuItem>
+                <MenuItem value="Rejected">Rejected</MenuItem>
+              </Select>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              height: "5%",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Button>Create</Button>
+          </Box>
+        </Box>
+      </Modal>
       {userInfo.logged_in === false ? (
         <>
           <Grid container className="outer-container">
@@ -72,7 +185,7 @@ function MainContainer() {
       ) : (
         <>
           <Grid container className="outer-container">
-            <Header item />
+            <Header item setOpenModal={setOpenModal} />
             <Kanban item />
             <Footer item />
           </Grid>
