@@ -4,6 +4,7 @@ const db = require('./models');
 const controller = {};
 
 controller.login = async (req, res, next) => {
+  console.log("logging in from backend");
   try {
     const { email, password } = req.body;
     const query = `SELECT * FROM users WHERE email='${email}';`;
@@ -19,7 +20,8 @@ controller.login = async (req, res, next) => {
       
       if(match) {
         res.cookie('user_id', user.rows[0]._id); 
-        // console.log(req.cookies.user_id);
+        res.locals.user_id = user.rows[0]._id; 
+        console.log("inserted cookie:", req.cookies.user_id);
         return next(); 
       }
       else {
@@ -59,16 +61,15 @@ controller.register = async (req, res, next) => {
       },
     });
 	}
-
 }
 
 controller.getJobs = async (req, res, next) => {
-  try {
-    const { user_id } = req.body;  
-    const query = `SELECT * FROM jobs WHERE user_id='${ req.cookies.user_id }';`;
+  try { 
+    console.log('COOKIES ', req.cookies.user_id);
+    const query = `SELECT * FROM jobs WHERE user_id='${ res.locals.user_id }';`;
     const jobs = await db.query(query);  
-    // console.log('jobs : ', jobs.rows[0]);
-    res.locals.jobs = jobs.rows[0];
+    console.log('jobs : ', jobs.rows);
+    res.locals.jobs = jobs.rows;
     return next(); 
   }
   catch (err) {
@@ -82,14 +83,14 @@ controller.getJobs = async (req, res, next) => {
   }   
 }
 
-// need to add las updated column
 controller.add = async (req, res, next) => {
   try {
     const { position, company, status } = req.body;  
+    console.log("reslocals user_id:", res.locals.user_id); 
     const query = `INSERT INTO jobs (user_id, position, company, status, note) VALUES ($1, $2, $3, $4, $5) RETURNING *;`
     const params = [req.cookies.user_id, position, company, status, ""];
     const addedJob = await db.query(query, params);  
-
+    res.locals.addedJob = addedJob.rows[0];
     return next(); 
   }
   catch (err) {
@@ -103,7 +104,6 @@ controller.add = async (req, res, next) => {
   }   
 }
 
-// last updated needs to be added
 controller.update = async (req, res, next) => {
 	try {
 		const { _id, status } = req.body;
@@ -144,7 +144,6 @@ controller.delete = async (req, res, next) => {
 	}  
 }
 
-// add las_updated date needs to be included
 controller.noteUpdate = async (req, res, next) => {
   try {
     const { _id, note } = req.body;

@@ -37,17 +37,24 @@ function MainContainer() {
     user_id: "",
     application_data: {
       // default data structure to transform data from backend
-      jobs: {},
+      jobs: {
+        "company-1": {
+          id: "99",
+          content: "Microsoft",
+          position: "Software Engineer",
+          note: ""
+        }
+      },
       columns: {
         "column-1": {
           id: "column-1",
           title: "Wish List",
-          companyIds: [],
+          companyIds: ["company-2"],
         },
         "column-2": {
           id: "column-2",
           title: "Applied",
-          companyIds: [],
+          companyIds: ["company-1"],
         },
         "column-3": {
           id: "column-3",
@@ -69,6 +76,7 @@ function MainContainer() {
     },
   });
 
+  // to register all the jobs
   function updateJobs() {
     // have to update according to the id of the backend
     const tempInfo = userInfo;
@@ -108,6 +116,14 @@ function MainContainer() {
     setPosition(event.target.value);
   }
 
+  async function addJob() {
+    const result = await axios.post("/add", {
+      position: position,
+      company: company,
+      status: status
+    })
+  }
+
   async function register(){
     
     const result = await axios.post('/register', {
@@ -116,6 +132,49 @@ function MainContainer() {
       password: password
     })
     console.log(result);
+  }
+
+  async function login() {
+    const result = await axios.post('/login', {
+      email: email,
+      password: password
+    })
+    
+    if (result) {
+      console.log(result.data)
+      // jobs: {
+      //   "company-1": {
+      //     id: "99",
+      //     content: "Microsoft",
+      //     position: "Software Engineer",
+      //     note: ""
+      //   }
+      // }
+      // result = JSON.parse(result);
+      const jobsParsed = {}
+      result.data.forEach(jobs => {
+        const {_id, company, position, note} = jobs
+
+        jobs[_id] = {
+          id: _id,
+          content: company,
+          position: position,
+          note: note
+        }
+      })
+
+      console.log('FINAL JOBS ', jobsParsed)
+
+      setUserInfo({
+        ...userInfo,
+        logged_in: true,
+        openModal: false,
+        ...application_data,
+        jobs: jobsParsed
+      });
+
+    }
+    
   }
 
   function updateName(event){
@@ -219,6 +278,7 @@ function MainContainer() {
                           width: "80%",
                           borderRadius: "20px",
                         }}
+                        onClick={login}
                       >
                         Login
                       </Button>

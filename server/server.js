@@ -27,9 +27,9 @@ app.delete('/note/delete', controller.noteDelete, (req, res) => {
 });
 
 // user information
-app.post('/login', controller.login, (req, res) => {
+app.post('/login', controller.login, controller.getJobs, (req, res) => {
   //console.log(req.headers.cookie); 
-  return res.sendStatus(200); 
+  return res.status(200).json(res.locals.jobs); 
 });
 
 app.post('/register', controller.register, (req, res) => {
@@ -42,12 +42,13 @@ app.get('/logout', (req, res) => {
 });
 
 // Job post information
+/*
 app.get('/getJobs', controller.getJobs, (req, res) => {
 	return res.sendStatus(200);
-});
+});*/
 
 app.post('/add', controller.add, (req, res) => {
-  return res.sendStatus(200); 
+  return res.status(200).json(res.locals.addedJob); 
 });
 
 app.put('/update', controller.update, (req, res) => {

@@ -112,3 +112,22 @@ h2.kanban-title {
   background: white;
   border-radius: 20px;
 }
+
+/* button styling */
+
+.button-container {
+  display: flex;
+  width: max-content;
+  gap: 10px;
+}
+
+.button-outer {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.button-style {
+  border-radius: 50px;
+}

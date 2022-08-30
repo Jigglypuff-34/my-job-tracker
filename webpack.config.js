@@ -17,7 +17,7 @@ const config = {
     },
     proxy: {
       '/register': 'http://localhost:3000',
-      'login': 'http://localhost:3000',
+      '/login': 'http://localhost:3000',
       '/logout': 'http://localhost:3000',
       '/getJobs': 'http://localhost:3000',
       '/add': 'http://localhost:3000',
