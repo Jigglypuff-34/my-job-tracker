@@ -1,17 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;1,100;1,300&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;1,100;1,300&display=swap");
 
 h1,
 h2,
 h3,
 h4,
 h5 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
 }
 
 p,
 span,
 div {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 /* containers */
@@ -65,10 +65,11 @@ div {
 .header {
   background: #ececec;
   grid-area: Header;
-  display: grid;
+  display: flex;
   align-items: center;
   justify-items: center;
   border-radius: 15px;
+  padding: 10px;
 }
 
 .footer {

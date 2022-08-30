@@ -1,11 +1,18 @@
 /* eslint-disable linebreak-style */
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import logo from "../assets/logo.png";
 
 function Header() {
   return (
     <Box className="header">
-      HEADER
+      <img src={logo} width="100px" />
+
+      <Box
+        sx={{
+          display: "flex",
+        }}
+      ></Box>
     </Box>
   );
 }
