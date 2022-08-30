@@ -71,6 +71,8 @@ function MainContainer() {
 
   // to register all the jobs
   function updateJobs() {
+    // axios to post backend
+
     // have to update according to the id of the backend
     const tempInfo = userInfo;
     const ranNum = Math.floor(Math.random() * 100);
@@ -115,22 +117,52 @@ function MainContainer() {
       company: company,
       status: status,
     });
-  }
 
+    if (result) {
+      const { _id, company, position, note, status } = result.data;
+      let targetColumn = "";
+      console.log(status);
+
+      if (status === "Wish List") {
+        targetColumn = "column-1";
+      } else if (status === "Applied") {
+        targetColumn = "column-2";
+      } else if (status === "Interview") {
+        targetColumn = "column-3";
+      } else if (status === "Offer") {
+        targetColumn = "column-4";
+      } else if (status === "Rejected") {
+        targetColumn = "column-5";
+      }
+
+      const tempInfo = userInfo;
+      tempInfo.application_data.jobs[`${_id}`] = {
+        id: `${_id}`,
+        content: company,
+      };
+      for (let col in tempInfo.application_data.columns) {
+        if (tempInfo.application_data.columns[col].title === status) {
+          tempInfo.application_data.columns[col].companyIds.push(`${_id}`);
+        }
+      }
+      setUserInfo(tempInfo);
+      setOpenModal(false);
+    }
+  }
   async function register() {
     const result = await axios.post("/register", {
       name: name,
       email: email,
       password: password,
     });
-    console.log(result);
   }
-
   async function login() {
     const result = await axios.post("/login", {
       email: email,
       password: password,
     });
+
+    console.log(result);
 
     if (result) {
       const jobsParsed = {};
@@ -139,7 +171,6 @@ function MainContainer() {
       const interviewArray = [];
       const offerArray = [];
       const rejectedArray = [];
-      console.log(result);
       result.data.forEach((jobs) => {
         const { _id, company, position, note, status } = jobs;
         jobsParsed[_id] = {
@@ -154,7 +185,7 @@ function MainContainer() {
         } else if (status === "Applied") {
           appliedArray.push(_id);
         } else if (status === "Interview") {
-          interviewArray.push("_id");
+          interviewArray.push(_id);
         } else if (status === "Offer") {
           offerArray.push(_id);
         } else if (status === "Rejected") {
@@ -202,6 +233,18 @@ function MainContainer() {
       setOpenModal(false);
     }
   }
+
+  async function checkLogin() {
+    const result = await axios.get("/isLoggedIn");
+    if (result.data.loggedin) {
+      const result = await axios.get("/getJobs");
+    }
+  }
+
+  // edge case for logging out of website
+  useEffect(() => {
+    // checkLogin();
+  }, []);
 
   function updateName(event) {
     setName(event.target.value);
@@ -462,7 +505,7 @@ function MainContainer() {
                   justifyContent: "center",
                 }}
               >
-                <Button onClick={updateJobs}>Create</Button>
+                <Button onClick={addJob}>Create</Button>
               </Box>
             </Box>
           </Modal>
