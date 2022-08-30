@@ -1,15 +1,23 @@
-import { initalData } from "./data";
-import React, { useState, useEffect } from "react";
-import { Column } from "./Column";
+import React, { useState, useEffect, useContext } from "react";
+import { Column } from "./Column.jsx";
 import { DragDropContext } from "react-beautiful-dnd";
 import styled from "styled-components";
+import { Box } from "@mui/material";
+import { InfoContext } from "../containers/MainContainer.jsx";
 
-const Container = styled.div`
-  display: flex;
-`;
+const Container = styled.div``;
+
+const COLUMN_NAMES = [
+  "kanban-wishlist",
+  "kanban-applied",
+  "kanban-interview",
+  "kanban-offer",
+  "kanban-rejected",
+];
 
 export function Board() {
-  const [data, setData] = useState(initalData);
+  const [userInfo, setUserInfo] = useContext(InfoContext);
+  const [data, setData] = useState(userInfo.application_data);
 
   // update order once dragging ends
   function onDragEnd(result) {
@@ -31,13 +39,13 @@ export function Board() {
     const finish = data.columns[destination.droppableId];
 
     if (start === finish) {
-      const newTaskIds = Array.from(start.taskIds);
+      const newTaskIds = Array.from(start.companyIds);
       newTaskIds.splice(source.index, 1);
       newTaskIds.splice(destination.index, 0, draggableId);
 
       const newColumn = {
         ...start,
-        taskIds: newTaskIds,
+        companyIds: newTaskIds,
       };
 
       const newData = {
@@ -49,18 +57,18 @@ export function Board() {
       };
       setData(newData);
     } else {
-      const startTaskIds = Array.from(start.taskIds);
+      const startTaskIds = Array.from(start.companyIds);
       startTaskIds.splice(source.index, 1);
       const newStart = {
         ...start,
-        taskIds: startTaskIds,
+        companyIds: startTaskIds,
       };
 
-      const finishTaskIds = Array.from(finish.taskIds);
+      const finishTaskIds = Array.from(finish.companyIds);
       finishTaskIds.splice(destination.index, 0, draggableId);
       const newFinish = {
         ...finish,
-        taskIds: finishTaskIds,
+        companyIds: finishTaskIds,
       };
 
       const newData = {
@@ -78,12 +86,14 @@ export function Board() {
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Container>
-          {data.columnOrder.map((columnId) => {
+        <Container className="kanban-container">
+          {data.columnOrder.map((columnId, index) => {
             const column = data.columns[columnId];
-            const tasks = column.taskIds.map((taskId) => data.tasks[taskId]);
+            const jobs = column.companyIds.map((taskId) => data.jobs[taskId]);
             return (
-              <Column key={column.id} column={column} tasks={tasks}></Column>
+              <Box className={`${COLUMN_NAMES[index]} kanban-columns`}>
+                <Column key={column.id} column={column} jobs={jobs}></Column>
+              </Box>
             );
           })}
         </Container>

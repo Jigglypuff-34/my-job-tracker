@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
-import { Paper } from "@mui/material";
 
 const Container = styled.div`
   border: 1px solid lightgrey;
@@ -14,9 +13,9 @@ const Container = styled.div`
   display: flex;
 `;
 
-export function Task(props) {
+export function Job(props) {
   return (
-    <Draggable draggableId={props.task.id} index={props.index}>
+    <Draggable draggableId={props.job.id} index={props.index}>
       {(provided, snapshot) => (
         <Container
           ref={provided.innerRef}
@@ -24,7 +23,7 @@ export function Task(props) {
           isDragging={snapshot.isDragging}
           {...provided.dragHandleProps}
         >
-          {props.task.content}
+          {props.job.content}
         </Container>
       )}
     </Draggable>

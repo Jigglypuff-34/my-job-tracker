@@ -1,15 +1,12 @@
 import React from "react";
-import { Button } from "@mui/material";
-import { Board } from "./board-components/Board";
+import MainContainer from "./containers/MainContainer.jsx";
 
-class App extends React.Component {
-  render() {
-    return (
-      <>
-        <Board />
-      </>
-    );
-  }
+function App() {
+  return (
+    <>
+      <MainContainer />
+    </>
+  );
 }
 
 export default App;

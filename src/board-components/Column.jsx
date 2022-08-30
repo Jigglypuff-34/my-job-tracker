@@ -1,21 +1,19 @@
 import React from "react";
 import styled from "styled-components";
-import { Task } from "./Task";
+import { Job } from "./Job.jsx";
 import { Droppable } from "react-beautiful-dnd";
 
 const Container = styled.div`
   margin: 8x;
-  border: 1px solid lightgrey;
   border-radius: 2px;
-  width: 220px;
-
+  height: 100%;
   display: flex;
   flex-direction: column;
 `;
 const Title = styled.h3`
   padding: 8px;
 `;
-const TaskList = styled.div`
+const CompanyList = styled.div`
   padding: 8px;
   transition: background-color 0.3s ease;
   background-color: ${(props) => {
@@ -23,6 +21,7 @@ const TaskList = styled.div`
   }};
   flex-grow: 1;
   min-height: 100px;
+  height: 100%;
 `;
 
 export function Column(props) {
@@ -31,16 +30,16 @@ export function Column(props) {
       <Title>{props.column.title}</Title>
       <Droppable droppableId={props.column.id}>
         {(provided, snapshot) => (
-          <TaskList
+          <CompanyList
             ref={provided.innerRef}
             {...provided.droppableProps}
             isDraggingOver={snapshot.isDraggingOver}
           >
-            {props.tasks.map((task, index) => (
-              <Task key={task.id} task={task} index={index}></Task>
+            {props.jobs.map((job, index) => (
+              <Job key={job.id} job={job} index={index}></Job>
             ))}
             {provided.placeholder}
-          </TaskList>
+          </CompanyList>
         )}
       </Droppable>
     </Container>
