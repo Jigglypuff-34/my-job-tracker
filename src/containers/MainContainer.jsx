@@ -17,6 +17,7 @@ import Landing from "../components/Landing.jsx";
 import Kanban from "../containers/KanbanContainer.jsx";
 import GoogleIcon from "@mui/icons-material/Google";
 import "../styles.css";
+import axios from "axios";
 
 export const InfoContext = createContext();
 
@@ -24,13 +25,14 @@ function MainContainer() {
   const [status, setStatus] = useState("");
   const [company, setCompany] = useState("");
   const [position, setPosition] = useState("");
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [modalLogin, setModalLogin] = useState(true);
+  const [modalLogin, setModalLogin] = useState(false);
 
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(true);
   const [userInfo, setUserInfo] = useState({
-    logged_in: true,
+    logged_in: false,
     user_name: "",
     user_id: "",
     application_data: {
@@ -86,8 +88,8 @@ function MainContainer() {
     setOpenModal(false);
   }
 
-  function updateUsername(event) {
-    setUsername(event.target.value);
+  function updateEmail(event) {
+    setEmail(event.target.value);
   }
 
   function updatePassword(event) {
@@ -104,6 +106,20 @@ function MainContainer() {
 
   function updatePosition(event) {
     setPosition(event.target.value);
+  }
+
+  async function register(){
+    
+    const result = await axios.post('/register', {
+      name: name,
+      email: email,
+      password: password
+    })
+    console.log(result);
+  }
+
+  function updateName(event){
+    setName(event.target.value)
   }
 
   return (
@@ -159,13 +175,23 @@ function MainContainer() {
                     gap: "5px",
                   }}
                 >
+                  {!modalLogin && 
                   <TextField
                     sx={{
                       width: "90%",
                     }}
-                    label="Username"
+                    label="Name"
                     variant="outlined"
-                    onChange={updateUsername}
+                    onChange={updateName}
+                  >
+                  </TextField>}
+                  <TextField
+                    sx={{
+                      width: "90%",
+                    }}
+                    label="Email"
+                    variant="outlined"
+                    onChange={updateEmail}
                   ></TextField>
                   <TextField
                     sx={{
@@ -204,6 +230,7 @@ function MainContainer() {
                             width: "80%",
                             borderRadius: "20px",
                           }}
+                          onClick={register}
                         >
                           Register
                         </Button>

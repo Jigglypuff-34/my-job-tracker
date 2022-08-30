@@ -16,7 +16,15 @@ const config = {
       directory: path.join(__dirname, 'dist'),
     },
     proxy: {
-      '/*': 'http://localhost:3000',
+      '/register': 'http://localhost:3000',
+      'login': 'http://localhost:3000',
+      '/logout': 'http://localhost:3000',
+      '/getJobs': 'http://localhost:3000',
+      '/add': 'http://localhost:3000',
+      '/update': 'http://localhost:3000',
+      '/delete': 'http://localhost:3000',
+      '/note/update': 'http://localhost:3000',
+      '/note/delete': 'http://localhost:3000',
     },
   },
   module: {

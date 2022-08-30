@@ -9,7 +9,7 @@
   "scripts": {
     "start": "nodemon server/server.js",
     "clean": "rm dist/bundle.js",
-    "dev": "webpack serve --mode development",
+    "dev": "concurrently \"cross-env NODE_ENV=development webpack serve\" \"cross-env NODE_ENV=development nodemon server/server.js\"",
     "build-prod": "webpack --mode production",
     "win-dev2": "concurrently \"cross-env NODE_ENV=development nodemon server/server.js\" \"cross-env NODE_ENV=development webpack serve --open\"",
     "cypress:open": "cypress open",
@@ -30,7 +30,7 @@
     "path": "^0.12.7",
     "pg": "^8.8.0",
     "react": "^18.2.0",
-    "react-beautiful-dnd": "^13.1.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
     "styled-components": "^5.3.5",
     "webpack-dev-server": "^4.10.1"

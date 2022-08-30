@@ -15,8 +15,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// note CRUD
+app.use(express.static(path.resolve(__dirname, '../src')));
 
+// note CRUD
 app.put('/note/update', controller.noteUpdate, (req, res) => {
 	return res.sendStatus(200); 
 });
@@ -32,6 +33,7 @@ app.post('/login', controller.login, (req, res) => {
 });
 
 app.post('/register', controller.register, (req, res) => {
+  console.log('finishing up register in post');
   return res.sendStatus(200); 
 });
 
