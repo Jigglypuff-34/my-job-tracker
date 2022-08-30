@@ -66,13 +66,15 @@ controller.register = async (req, res, next) => {
 controller.getJobs = async (req, res, next) => {
   try { 
     // console.log('COOKIES ', req.cookies.user_id);
-    const query = `SELECT * FROM jobs WHERE user_id='${ res.locals.user_id }';`;
+    const query = `SELECT * FROM jobs WHERE user_id='${ req.cookies.user_id }';`;
     const jobs = await db.query(query);  
     // console.log('jobs : ', jobs.rows);
     res.locals.jobs = jobs.rows;
+    
     return next(); 
   }
   catch (err) {
+    console.log(err);
     return next({
       log: 'Error at middleware controller.getJobs',
       status: '501',
@@ -81,6 +83,24 @@ controller.getJobs = async (req, res, next) => {
       },
     });
   }   
+}
+
+controller.isLoggedIn = async (req, res, next) => {
+  try {
+    if(req.cookies.user_id) res.locals.isLoggedIn = {'loggedin': true, 'user_id': req.cookies.user_id };
+    else res.locals.isLoggedIn = {'loggedin': false, 'user_id': null };
+    return next(); 
+  }
+  catch (err) {
+    console.log(err); 
+    return next({
+      log: 'Error at middleware controller.isLoggedIn',
+      status: '501',
+      message: {
+        err: 'error occured while checking if user is logged in',
+      },
+    });
+  }
 }
 
 controller.add = async (req, res, next) => {

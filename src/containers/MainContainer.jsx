@@ -71,6 +71,8 @@ function MainContainer() {
 
   // to register all the jobs
   function updateJobs() {
+    // axios to post backend
+
     // have to update according to the id of the backend
     const tempInfo = userInfo;
     const ranNum = Math.floor(Math.random() * 100);
@@ -115,6 +117,54 @@ function MainContainer() {
       company: company,
       status: status,
     });
+
+    if (result) {
+      const { _id, company, position, note, status } = result.data;
+      let targetColumn = "";
+      console.log(status);
+
+      if (status === "Wish List") {
+        targetColumn = "column-1";
+      } else if (status === "Applied") {
+        targetColumn = "column-2";
+      } else if (status === "Interview") {
+        targetColumn = "column-3";
+      } else if (status === "Offer") {
+        targetColumn = "column-4";
+      } else if (status === "Rejected") {
+        targetColumn = "column-5";
+      }
+
+      console.log("before", userInfo);
+      const tempInfo = {
+        ...userInfo,
+        logged_in: true,
+        application_data: {
+          ...userInfo.application_data,
+          jobs: {
+            ...userInfo.application_data.jobs,
+            [_id]: {
+              id: _id,
+              content: company,
+              position: position,
+              note: note
+            }
+          },
+          columns: {
+            ...userInfo.application_data.columns,
+            [targetColumn]: {
+              id: targetColumn,
+              title: status,
+              companyIds: [...userInfo.application_data.columns[targetColumn].companyIds, _id]
+            }
+          }
+        },
+      }
+
+      console.log("tempInfo", tempInfo);
+      setUserInfo(tempInfo);
+      console.log("userInfo", userInfo);
+    }
   }
 
   async function register() {
@@ -161,6 +211,9 @@ function MainContainer() {
         }
       });
 
+      console.log('LIST OF JOBS ', result);
+      console.log('JOBS PARSED ', jobsParsed)
+
       const tempInfo = {
         ...userInfo,
         logged_in: true,
@@ -201,6 +254,20 @@ function MainContainer() {
       setOpenModal(false);
     }
   }
+
+  async function checkLogin() {
+    const result = await axios.get("/isLoggedIn");
+    if (result.data.loggedin){
+      const result = await axios.get("/getJobs");
+      console.log(result);
+    }
+
+  }
+
+  // edge case for logging out of website
+  useEffect(() => {
+    checkLogin();
+  }, []);
 
   function updateName(event) {
     setName(event.target.value);
@@ -461,7 +528,7 @@ function MainContainer() {
                   justifyContent: "center",
                 }}
               >
-                <Button onClick={updateJobs}>Create</Button>
+                <Button onClick={addJob}>Create</Button>
               </Box>
             </Box>
           </Modal>
@@ -470,6 +537,7 @@ function MainContainer() {
               item
               setOpenModal={setOpenModal}
               userLoggedIn={userInfo.logged_in}
+
             />
             <Kanban item />
             <Footer item />

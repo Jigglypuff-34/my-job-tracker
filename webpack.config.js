@@ -23,6 +23,7 @@ const config = {
       '/add': 'http://localhost:3000',
       '/update': 'http://localhost:3000',
       '/delete': 'http://localhost:3000',
+      '/isLoggedIn': 'http://localhost:3000',
       '/note/update': 'http://localhost:3000',
       '/note/delete': 'http://localhost:3000',
     },

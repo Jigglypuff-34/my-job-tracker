@@ -41,11 +41,15 @@ app.get('/logout', (req, res) => {
   return res.clearCookie('user_id').sendStatus(204); 
 });
 
+app.get('/isLoggedIn', controller.isLoggedIn, (req, res) => {
+  return res.status(200).json(res.locals.isLoggedIn); 
+});
+
 // Job post information
-/*
+
 app.get('/getJobs', controller.getJobs, (req, res) => {
-	return res.sendStatus(200);
-});*/
+  return res.status(200).json(res.locals.jobs);
+});
 
 app.post('/add', controller.add, (req, res) => {
   return res.status(200).json(res.locals.addedJob); 
