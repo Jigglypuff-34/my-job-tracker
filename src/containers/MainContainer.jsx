@@ -37,24 +37,17 @@ function MainContainer() {
     user_id: "",
     application_data: {
       // default data structure to transform data from backend
-      jobs: {
-        "company-1": {
-          id: "99",
-          content: "Microsoft",
-          position: "Software Engineer",
-          note: ""
-        }
-      },
+      jobs: {},
       columns: {
         "column-1": {
           id: "column-1",
           title: "Wish List",
-          companyIds: ["company-2"],
+          companyIds: [],
         },
         "column-2": {
           id: "column-2",
           title: "Applied",
-          companyIds: ["company-1"],
+          companyIds: [],
         },
         "column-3": {
           id: "column-3",
@@ -120,65 +113,98 @@ function MainContainer() {
     const result = await axios.post("/add", {
       position: position,
       company: company,
-      status: status
-    })
+      status: status,
+    });
   }
 
-  async function register(){
-    
-    const result = await axios.post('/register', {
+  async function register() {
+    const result = await axios.post("/register", {
       name: name,
       email: email,
-      password: password
-    })
+      password: password,
+    });
     console.log(result);
   }
 
   async function login() {
-    const result = await axios.post('/login', {
+    const result = await axios.post("/login", {
       email: email,
-      password: password
-    })
-    
-    if (result) {
-      console.log(result.data)
-      // jobs: {
-      //   "company-1": {
-      //     id: "99",
-      //     content: "Microsoft",
-      //     position: "Software Engineer",
-      //     note: ""
-      //   }
-      // }
-      // result = JSON.parse(result);
-      const jobsParsed = {}
-      result.data.forEach(jobs => {
-        const {_id, company, position, note} = jobs
+      password: password,
+    });
 
-        jobs[_id] = {
+    if (result) {
+      const jobsParsed = {};
+      const wishArray = [];
+      const appliedArray = [];
+      const interviewArray = [];
+      const offerArray = [];
+      const rejectedArray = [];
+      console.log(result);
+      result.data.forEach((jobs) => {
+        const { _id, company, position, note, status } = jobs;
+        jobsParsed[_id] = {
           id: _id,
           content: company,
           position: position,
-          note: note
+          note: note,
+        };
+
+        if (status === "Wishlist") {
+          wishArray.push(_id);
+        } else if (status === "Applied") {
+          appliedArray.push(_id);
+        } else if (status === "Interview") {
+          interviewArray.push("_id");
+        } else if (status === "Offer") {
+          offerArray.push(_id);
+        } else if (status === "Rejected") {
+          rejectedArray.push(_id);
         }
-      })
-
-      console.log('FINAL JOBS ', jobsParsed)
-
-      setUserInfo({
-        ...userInfo,
-        logged_in: true,
-        openModal: false,
-        ...application_data,
-        jobs: jobsParsed
       });
 
+      const tempInfo = {
+        ...userInfo,
+        logged_in: true,
+        application_data: {
+          ...userInfo.application_data,
+          jobs: jobsParsed,
+          columns: {
+            "column-1": {
+              id: "column-1",
+              title: "Wish List",
+              companyIds: wishArray,
+            },
+            "column-2": {
+              id: "column-2",
+              title: "Applied",
+              companyIds: appliedArray,
+            },
+            "column-3": {
+              id: "column-3",
+              title: "Interview",
+              companyIds: interviewArray,
+            },
+            "column-4": {
+              id: "column-4",
+              title: "Offer",
+              companyIds: offerArray,
+            },
+            "column-5": {
+              id: "column-5",
+              title: "Rejected",
+              companyIds: rejectedArray,
+            },
+          },
+        },
+      };
+
+      setUserInfo(tempInfo);
+      setOpenModal(false);
     }
-    
   }
 
-  function updateName(event){
-    setName(event.target.value)
+  function updateName(event) {
+    setName(event.target.value);
   }
 
   return (
@@ -234,16 +260,16 @@ function MainContainer() {
                     gap: "5px",
                   }}
                 >
-                  {!modalLogin && 
-                  <TextField
-                    sx={{
-                      width: "90%",
-                    }}
-                    label="Name"
-                    variant="outlined"
-                    onChange={updateName}
-                  >
-                  </TextField>}
+                  {!modalLogin && (
+                    <TextField
+                      sx={{
+                        width: "90%",
+                      }}
+                      label="Name"
+                      variant="outlined"
+                      onChange={updateName}
+                    ></TextField>
+                  )}
                   <TextField
                     sx={{
                       width: "90%",

@@ -15,7 +15,7 @@ const Container = styled.div`
 
 export function Job(props) {
   return (
-    <Draggable draggableId={props.job.id} index={props.index}>
+    <Draggable draggableId={props.job.id + ""} index={props.index}>
       {(provided, snapshot) => (
         <Container
           ref={provided.innerRef}
