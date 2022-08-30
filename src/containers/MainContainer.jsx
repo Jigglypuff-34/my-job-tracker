@@ -28,7 +28,7 @@ function MainContainer() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [modalLogin, setModalLogin] = useState(false);
+  const [modalLogin, setModalLogin] = useState(true);
 
   const [openModal, setOpenModal] = useState(true);
   const [userInfo, setUserInfo] = useState({
