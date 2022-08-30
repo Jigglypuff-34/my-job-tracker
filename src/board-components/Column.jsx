@@ -18,7 +18,7 @@ const CompanyList = styled.div`
   padding: 8px;
   transition: background-color 0.3s ease;
   background-color: ${(props) => {
-    return props.isDraggingOver ? "skyblue" : "white";
+    return props.isDraggingOver ? "orange" : "white";
   }};
   flex-grow: 1;
   min-height: 100px;

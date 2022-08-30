@@ -99,3 +99,16 @@ h2.kanban-title {
   background: white;
   border-radius: 20px;
 }
+
+.kanban-login-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kanban-login-box {
+  width: 400px;
+  height: 50%;
+  background: white;
+  border-radius: 20px;
+}
