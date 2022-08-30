@@ -9,6 +9,16 @@ const config = {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
   },
+  devServer: {
+    hot: true,
+    static: {
+      publicPath: '/',
+      directory: path.join(__dirname, 'dist'),
+    },
+    proxy: {
+      '/*': 'http://localhost:3000',
+    },
+  },
   module: {
     rules: [
       {
