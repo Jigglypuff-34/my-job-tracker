@@ -1,4 +1,4 @@
-export const result = {
+const result = {
   draggableId: "task-1",
   type: "TYPE",
   reason: "DROP",

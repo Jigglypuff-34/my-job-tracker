@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
+import { Paper } from "@mui/material";
 
 const Container = styled.div`
   border: 1px solid lightgrey;
@@ -10,7 +11,9 @@ const Container = styled.div`
   background: ${(props) => {
     return props.isDragging ? "lightgreen" : "white";
   }};
+  display: flex;
 `;
+
 export function Task(props) {
   return (
     <Draggable draggableId={props.task.id} index={props.index}>
@@ -18,8 +21,8 @@ export function Task(props) {
         <Container
           ref={provided.innerRef}
           {...provided.draggableProps}
-          {...provided.dragHandleProps}
           isDragging={snapshot.isDragging}
+          {...provided.dragHandleProps}
         >
           {props.task.content}
         </Container>
