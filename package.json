@@ -9,24 +9,24 @@
   "scripts": {
     "start": "nodemon server/server.js",
     "clean": "rm dist/bundle.js",
-    "build-dev": "webpack --mode development",
+    "dev": "webpack serve --mode development",
     "build-prod": "webpack --mode production",
+    "win-dev2": "concurrently \"cross-env NODE_ENV=development nodemon server/server.js\" \"cross-env NODE_ENV=development webpack serve --open\"",
     "cypress:open": "cypress open",
     "test": "jest"
   },
   "dependencies": {
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
-    "axios": "^0.27.2",
-    "bcrypt": "^5.0.1",
-    "body-parser": "^1.20.0",
-    "cookie-parser": "^1.4.6",
-    "express": "^4.18.1",
-    "fontsource-roboto": "^4.0.0",
-    "path": "^0.12.7",
-    "pg": "^8.8.0",
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
+    "@mui/icons-material": "^5.10.3",
+    "@mui/material": "^5.10.3",
+    "concurrently": "^7.3.0",
+    "cross-env": "^7.0.3",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-beautiful-dnd": "^13.1.0",
+    "react-dom": "^18.2.0",
+    "styled-components": "^5.3.5",
+    "webpack-dev-server": "^4.10.1"
   },
   "devDependencies": {
     "@babel/core": "^7.18.13",
@@ -37,11 +37,11 @@
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.7.1",
     "cypress": "^10.6.0",
-    "dotenv": "^16.0.1",
+    "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
     "jest": "^29.0.1",
-    "nodemon": "^2.0.19",
     "style-loader": "^3.3.1",
+    "url-loader": "^4.1.1",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
   }
