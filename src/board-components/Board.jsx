@@ -89,11 +89,11 @@ export function Board() {
         ...userInfo,
         application_data: newData,
       });
-      // console.log("board:", finishTaskIds[0], newFinish.title); 
+      console.log(newFinish.title);
       axios.put("/update", {
         _id: finishTaskIds[0],
-        status: newFinish.title
-      })
+        status: newFinish.title,
+      });
     }
   }
 

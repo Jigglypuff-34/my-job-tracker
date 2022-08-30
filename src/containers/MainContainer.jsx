@@ -69,28 +69,6 @@ function MainContainer() {
     },
   });
 
-  // to register all the jobs
-  function updateJobs() {
-    // axios to post backend
-
-    // have to update according to the id of the backend
-    const tempInfo = userInfo;
-    const ranNum = Math.floor(Math.random() * 100);
-    tempInfo.application_data.jobs[`company-${ranNum}`] = {
-      id: `company-${ranNum}`,
-      content: company,
-    };
-
-    for (let col in tempInfo.application_data.columns) {
-      if (tempInfo.application_data.columns[col].title === status) {
-        tempInfo.application_data.columns[col].companyIds.push(
-          `company-${ranNum}`
-        );
-      }
-    }
-    setOpenModal(false);
-  }
-
   function updateEmail(event) {
     setEmail(event.target.value);
   }
@@ -162,9 +140,8 @@ function MainContainer() {
       password: password,
     });
 
-    console.log(result);
-
     if (result) {
+      console.log(result.data);
       const jobsParsed = {};
       const wishArray = [];
       const appliedArray = [];
@@ -180,7 +157,7 @@ function MainContainer() {
           note: note,
         };
 
-        if (status === "Wishlist") {
+        if (status === "Wish List") {
           wishArray.push(_id);
         } else if (status === "Applied") {
           appliedArray.push(_id);
