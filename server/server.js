@@ -40,7 +40,7 @@ app.get('/logout', (req, res) => {
 });
 
 // Job post information
-app.get('/getJobs', (req, res) => {
+app.get('/getJobs', controller.getJobs, (req, res) => {
 	return res.sendStatus(200);
 });
 

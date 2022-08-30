@@ -60,6 +60,27 @@ controller.register = async (req, res, next) => {
 
 }
 
+controller.getJobs = async (req, res, next) => {
+  try {
+    const { user_id } = req.body;  
+    const query = `SELECT * FROM jobs WHERE user_id='${ user_id }';`;
+    const jobs = await db.query(query);  
+    // console.log('jobs : ', jobs.rows[0]);
+    res.locals.jobs = jobs.rows[0];
+    return next(); 
+  }
+  catch (err) {
+    return next({
+      log: 'Error at middleware controller.getJobs',
+      status: '501',
+      message: {
+        err: 'error occured while getting jobs',
+      },
+    });
+  }   
+}
+
+// need to add las updated column
 controller.add = async (req, res, next) => {
   try {
     const { position, company, status, user_id } = req.body;  
@@ -77,10 +98,10 @@ controller.add = async (req, res, next) => {
         err: 'error occured while adding job',
       },
     });
-  }
-    
+  }   
 }
 
+// last updated needs to be added
 controller.update = async (req, res, next) => {
 	try {
 		const { _id, status } = req.body;
@@ -121,11 +142,12 @@ controller.delete = async (req, res, next) => {
 	}  
 }
 
-  controller.noteUpdate = async (req, res, next) => {
+// add las_updated date needs to be included
+controller.noteUpdate = async (req, res, next) => {
   try {
     const { _id, note } = req.body;
     const query = `UPDATE jobs SET note='${note}' WHERE _id =${_id}`;
-    const jobUpdate = await(db.query(query));
+    const jobUpdate = await db.query(query);
     
     return next(); 
   }
@@ -138,20 +160,20 @@ controller.delete = async (req, res, next) => {
       },
     });
   }
-    
-  }
+}
 
-  controller.noteDelete = async (req, res, next) => {
+controller.noteDelete = async (req, res, next) => {
   try {
     const { _id } = req.body;
-    const query = `DELETE FROM jobs WHERE _id=${_id}`;
-
+    const query = `UPDATE jobs SET note=null WHERE _id =${_id}`;
+    await db.query(query);
+    
     return next();
   }
   catch (err) {
     console.log(err);
     return next({
-      log: 'Error at middleware controller.updateDelete',
+      log: 'Error at middleware controller.noteDelete',
       status: '501',
       message: {
         err: 'error occured while removing note',
