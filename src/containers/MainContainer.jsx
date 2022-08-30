@@ -135,52 +135,34 @@ function MainContainer() {
         targetColumn = "column-5";
       }
 
-      console.log("before", userInfo);
-      const tempInfo = {
-        ...userInfo,
-        logged_in: true,
-        application_data: {
-          ...userInfo.application_data,
-          jobs: {
-            ...userInfo.application_data.jobs,
-            [_id]: {
-              id: _id,
-              content: company,
-              position: position,
-              note: note
-            }
-          },
-          columns: {
-            ...userInfo.application_data.columns,
-            [targetColumn]: {
-              id: targetColumn,
-              title: status,
-              companyIds: [...userInfo.application_data.columns[targetColumn].companyIds, _id]
-            }
-          }
-        },
+      const tempInfo = userInfo;
+      tempInfo.application_data.jobs[`${_id}`] = {
+        id: `${_id}`,
+        content: company,
+      };
+      for (let col in tempInfo.application_data.columns) {
+        if (tempInfo.application_data.columns[col].title === status) {
+          tempInfo.application_data.columns[col].companyIds.push(`${_id}`);
+        }
       }
-
-      console.log("tempInfo", tempInfo);
       setUserInfo(tempInfo);
-      console.log("userInfo", userInfo);
+      setOpenModal(false);
     }
   }
-
   async function register() {
     const result = await axios.post("/register", {
       name: name,
       email: email,
       password: password,
     });
-    console.log(result);
   }
-
   async function login() {
     const result = await axios.post("/login", {
       email: email,
       password: password,
     });
+
+    console.log(result);
 
     if (result) {
       const jobsParsed = {};
@@ -210,9 +192,6 @@ function MainContainer() {
           rejectedArray.push(_id);
         }
       });
-
-      console.log('LIST OF JOBS ', result);
-      console.log('JOBS PARSED ', jobsParsed)
 
       const tempInfo = {
         ...userInfo,
@@ -257,16 +236,14 @@ function MainContainer() {
 
   async function checkLogin() {
     const result = await axios.get("/isLoggedIn");
-    if (result.data.loggedin){
+    if (result.data.loggedin) {
       const result = await axios.get("/getJobs");
-      console.log(result);
     }
-
   }
 
   // edge case for logging out of website
   useEffect(() => {
-    checkLogin();
+    // checkLogin();
   }, []);
 
   function updateName(event) {
@@ -537,7 +514,6 @@ function MainContainer() {
               item
               setOpenModal={setOpenModal}
               userLoggedIn={userInfo.logged_in}
-
             />
             <Kanban item />
             <Footer item />
