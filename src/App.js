@@ -4,7 +4,6 @@ import { Board } from "./board-components/Board";
 
 class App extends React.Component {
   render() {
-    const { name } = this.props;
     return (
       <>
         <Board />
