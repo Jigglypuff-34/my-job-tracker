@@ -104,7 +104,11 @@ export function Board() {
             const jobs = column.companyIds.map((taskId) => data.jobs[taskId]);
             return (
               <Box className={`${COLUMN_NAMES[index]} kanban-columns`}>
-                <Column key={column.id} column={column} jobs={jobs}></Column>
+                <Column
+                  key={column.id + ""}
+                  column={column}
+                  jobs={jobs}
+                ></Column>
               </Box>
             );
           })}
