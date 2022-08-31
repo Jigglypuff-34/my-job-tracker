@@ -5,7 +5,8 @@ import { Box } from "@mui/material";
 function Footer() {
   return (
     <Box className="footer">
-      FOOTER
+      © 2022 | MyJobTracker | Developed and Licensed Under Jiggypuff, Inc. | All
+      rights reserved.
     </Box>
   );
 }
