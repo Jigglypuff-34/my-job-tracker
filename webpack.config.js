@@ -3,13 +3,17 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
-const config = {
+module.exports = {
   entry: "./src/index.js",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
   },
+  devtool: 'eval-source-map',
+  mode: 'development',
   devServer: {
+    host: '0.0.0.0',
+    port: 8080,
     hot: true,
     static: {
       publicPath: '/',
@@ -42,6 +46,7 @@ const config = {
       },
       {
         test: /\.css$/,
+        exclude: /node_modules/,
         use: ["style-loader", "css-loader"],
       },
       {
@@ -62,4 +67,3 @@ const config = {
   ],
 };
 
-module.exports = config;
