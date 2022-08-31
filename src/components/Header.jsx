@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { Box, Button } from "@mui/material";
-import logo from "../assets/logo.png";
+import logo from "../assets/mjt-logo.svg";
 import axios from "axios";
 import { InfoContext } from "../containers/MainContainer.jsx";
 
@@ -13,18 +13,24 @@ function Header(props) {
     setUserInfo({
       ...userInfo,
       logged_in: false,
-    })
+    });
   }
 
   return (
     <Box className="header">
-      <img src={logo} width="100px" />
+      <img src={logo} width="230px" />
       <Box className="button-outer">
         {props.userLoggedIn && (
           <Box className="button-container">
-            <Button className="button-style" onClick={() => { props.setOpenModal(true) }}>
+            <Button
+              className="button-style"
+              onClick={() => {
+                props.setOpenModal(true);
+              }}
+            >
               Add Job
             </Button>
+
             <Button className="button-style" onClick={logout}>
               Logout
             </Button>
@@ -33,7 +39,16 @@ function Header(props) {
 
         {!props.userLoggedIn && (
           <Box className="button-container">
-            <Button className="button-style" onClick={() => { props.setOpenModal(true) }}>
+            <Button
+              sx={{
+                color: "#F4F6FC",
+                borderRadius: "30px",
+              }}
+              className="button-style"
+              onClick={() => {
+                props.setOpenModal(true);
+              }}
+            >
               Login
             </Button>
           </Box>

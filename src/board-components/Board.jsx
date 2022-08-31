@@ -19,7 +19,7 @@ const COLUMN_NAMES = [
 export function Board() {
   const [userInfo, setUserInfo] = useContext(InfoContext);
   const [data, setData] = useState(userInfo.application_data);
-  const [columnArray, setColumnArray] = useState([]);
+
   // update order once dragging ends
   function onDragEnd(result) {
     document.body.style.color = "inherit";
