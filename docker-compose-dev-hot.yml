@@ -1,7 +1,7 @@
 version: "3"
 services:
   dev: 
-    image: "jigglypuff-34u/mm-dev"
+    image: "jigglypuff-34/mm-dev"
     container_name: "mm-dev-hot"
     ports: 
       - "8080:8080"
