@@ -31,7 +31,7 @@ function MainContainer() {
   const [modalLogin, setModalLogin] = useState(true);
   const [deleteJob, setDeleteJob] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(true);
   const [userInfo, setUserInfo] = useState({
     logged_in: false,
     user_name: "",
@@ -263,6 +263,7 @@ function MainContainer() {
               >
                 <CancelIcon
                   sx={{
+                    color: "#f50057",
                     marginRight: "10px",
                     marginTop: "10px",
                     "&:hover": {
@@ -284,7 +285,14 @@ function MainContainer() {
                 }}
               >
                 {modalLogin ? (
-                  <Typography variant="h5">Login</Typography>
+                  <Typography
+                    sx={{
+                      color: "#050A30",
+                    }}
+                    variant="h5"
+                  >
+                    Login
+                  </Typography>
                 ) : (
                   <Typography variant="h5">Register</Typography>
                 )}
@@ -316,6 +324,7 @@ function MainContainer() {
                     }}
                     label="Email"
                     variant="outlined"
+                    required
                     onChange={updateEmail}
                   ></TextField>
                   <TextField
@@ -324,6 +333,7 @@ function MainContainer() {
                     }}
                     label="Password"
                     variant="outlined"
+                    required
                     type="password"
                     onChange={updatePassword}
                   ></TextField>
@@ -341,6 +351,7 @@ function MainContainer() {
                       <Button
                         variant="contained"
                         sx={{
+                          backgroundColor: "#233DFF",
                           width: "80%",
                           borderRadius: "20px",
                         }}
