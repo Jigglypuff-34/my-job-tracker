@@ -1,6 +1,7 @@
-FROM node:16.15.0
-WORKDIR /usr/src/app
-RUN npm install --save-dev webpack
-COPY package*.json /usr/src/app
-RUN npm install
-EXPOSE 3000
+FROM node:16.13
+RUN npm i webpack -g
+WORKDIR /user/src/app
+COPY package*.json ./ 
+COPY . .
+RUN npm i 
+EXPOSE 3000 
