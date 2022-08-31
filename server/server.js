@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv')
 dotenv.config();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || '3000';
 const express = require('express');
 const controller = require('./controller');
 

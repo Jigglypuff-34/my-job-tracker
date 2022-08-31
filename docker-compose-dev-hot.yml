@@ -1,0 +1,13 @@
+version: "3"
+services:
+  dev: 
+    image: "jigglypuff-34/mm-dev"
+    container_name: "mm-dev-hot"
+    ports: 
+      - "8080:8080"
+    volumes: 
+      - ".:/usr/src/app"
+      - "node_modules:/usr/src/app/node_modules"
+    command: "npm run dev:hot"
+volumes:
+  node_modules:
