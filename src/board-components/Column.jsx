@@ -15,10 +15,9 @@ const Title = styled.h3`
   font-family: Roboto;
 `;
 const CompanyList = styled.div`
-  padding: 8px;
   transition: background-color 0.3s ease;
   background-color: ${(props) => {
-    return props.isDraggingOver ? "orange" : "white";
+    return props.isDraggingOver ? "#D3D3D3" : "white";
   }};
   flex-grow: 1;
   min-height: 100px;
@@ -28,7 +27,9 @@ const CompanyList = styled.div`
 export function Column(props) {
   return (
     <Container>
-      <Title>{props.column.title}</Title>
+      <Title className="kanban-column-title">
+        {props.column.title.toUpperCase()}
+      </Title>
       <Droppable droppableId={props.column.id}>
         {(provided, snapshot) => (
           <CompanyList
