@@ -8,11 +8,6 @@ describe('empty spec', () => {
     cy.get('input').eq(1).type("mikey", { force: true });
     cy.get('button').eq(1).click({ force: true });
     cy.contains('Add Job');
-    cy.contains('Wish List');
-    cy.contains('Applied');
-    cy.contains('Interview');
-    cy.contains('Offer');
-    cy.contains('Rejected');
     cy.contains('Logout').click();
     cy.contains('Login');
   });
