@@ -18,7 +18,7 @@ const svgVariants = {
 function Landing() {
   return (
     <Box className="landing">
-      <motion.svg width="300">
+      <motion.svg width="300" height="320px">
         <defs>
           <clipPath id="id1">
             <motion.path

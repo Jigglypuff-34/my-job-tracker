@@ -27,11 +27,22 @@ function Header(props) {
               onClick={() => {
                 props.setOpenModal(true);
               }}
+              sx={{
+                color: "#F4F6FC",
+                borderRadius: "30px",
+              }}
             >
               Add Job
             </Button>
 
-            <Button className="button-style" onClick={logout}>
+            <Button
+              sx={{
+                color: "#F4F6FC",
+                borderRadius: "30px",
+              }}
+              className="button-style"
+              onClick={logout}
+            >
               Logout
             </Button>
           </Box>
