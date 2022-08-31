@@ -41,8 +41,8 @@ app.get('/logout', (req, res) => {
   return res.clearCookie('user_id').sendStatus(204); 
 });
 
-app.get('/isLoggedIn', controller.isLoggedIn, (req, res) => {
-  return res.status(200).json(res.locals.isLoggedIn); 
+app.get('/isLoggedIn', controller.isLoggedIn, controller.getJobs, (req, res) => {
+  return res.status(200).json(res.locals.jobs); 
 });
 
 // Job post information
@@ -59,7 +59,7 @@ app.put('/update', controller.update, (req, res) => {
   return res.sendStatus(200); 
 }); 
 
-app.delete('/delete', controller.delete, (req, res) => {
+app.post('/delete', controller.delete, (req, res) => {
   return res.sendStatus(200); 
 }); 
 

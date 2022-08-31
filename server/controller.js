@@ -89,6 +89,7 @@ controller.isLoggedIn = async (req, res, next) => {
     if (req.cookies.user_id)
       res.locals.isLoggedIn = { loggedin: true, user_id: req.cookies.user_id };
     else res.locals.isLoggedIn = { loggedin: false, user_id: null };
+    
     return next();
   } catch (err) {
     console.log(err);
@@ -146,7 +147,7 @@ controller.delete = async (req, res, next) => {
     const { _id } = req.body;
     const query = `DELETE FROM jobs WHERE _id=${_id}`;
     const deleted = await db.query(query);
-    // console.log(deleted);
+   
     return next();
   } catch (err) {
     return next({
