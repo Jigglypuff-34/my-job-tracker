@@ -27,6 +27,7 @@
     "cookie-parser": "^1.4.6",
     "cross-env": "^7.0.3",
     "express": "^4.18.1",
+    "framer-motion": "^7.2.1",
     "path": "^0.12.7",
     "pg": "^8.8.0",
     "react": "^18.2.0",

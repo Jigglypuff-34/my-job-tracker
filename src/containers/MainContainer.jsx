@@ -31,7 +31,7 @@ function MainContainer() {
   const [modalLogin, setModalLogin] = useState(true);
   const [deleteJob, setDeleteJob] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const [userInfo, setUserInfo] = useState({
     logged_in: false,
     user_name: "",
@@ -212,22 +212,27 @@ function MainContainer() {
     }
   }
 
-  async function updateBoard(){
+  async function updateBoard() {
     const tempInfo = userInfo;
-      delete tempInfo.application_data.jobs[`${deleteId}`]
-      for (let col in tempInfo.application_data.columns) {
-          if (tempInfo.application_data.columns[col].companyIds.includes(deleteId)){
-            tempInfo.application_data.columns[col].companyIds.splice(tempInfo.application_data.columns[col].companyIds.indexOf(deleteId), 1);
-          }
+    delete tempInfo.application_data.jobs[`${deleteId}`];
+    for (let col in tempInfo.application_data.columns) {
+      if (
+        tempInfo.application_data.columns[col].companyIds.includes(deleteId)
+      ) {
+        tempInfo.application_data.columns[col].companyIds.splice(
+          tempInfo.application_data.columns[col].companyIds.indexOf(deleteId),
+          1
+        );
       }
-      setUserInfo(tempInfo);
-      setDeleteJob(false);
+    }
+    setUserInfo(tempInfo);
+    setDeleteJob(false);
   }
 
   useEffect(() => {
     updateBoard();
-    console.log("after deletion", userInfo)
-  }, [deleteJob])
+    console.log("after deletion", userInfo);
+  }, [deleteJob]);
 
   async function checkLogin() {
     const result = await axios.get("/isLoggedIn");
@@ -236,13 +241,14 @@ function MainContainer() {
     }
   }
 
-
   function updateName(event) {
     setName(event.target.value);
   }
 
   return (
-    <InfoContext.Provider value={[userInfo, setUserInfo, setDeleteJob, setDeleteId]}>
+    <InfoContext.Provider
+      value={[userInfo, setUserInfo, setDeleteJob, setDeleteId]}
+    >
       {userInfo.logged_in === false ? (
         <>
           <Modal className="kanban-login-modal" open={openModal}>

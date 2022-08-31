@@ -49,6 +49,11 @@ div {
   text-align: center;
 }
 
+.landing {
+  display: flex;
+  justify-content: center;
+}
+
 /* cards */
 .kanban-card {
   border: 1px solid #f3f3f3;
@@ -63,7 +68,7 @@ div {
 
 /* nav */
 .header {
-  background: #ececec;
+  background: #050a30;
   grid-area: Header;
   display: flex;
   align-items: center;
@@ -73,7 +78,9 @@ div {
 }
 
 .footer {
-  background: #ececec;
+  background-color: #050a30;
+  color: #f4f6fc;
+  font-size: 0.7em;
   grid-area: Footer;
   display: grid;
   align-items: center;
