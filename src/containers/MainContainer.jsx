@@ -31,7 +31,7 @@ function MainContainer() {
   const [modalLogin, setModalLogin] = useState(true);
   const [deleteJob, setDeleteJob] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const [userInfo, setUserInfo] = useState({
     logged_in: false,
     user_name: "",
@@ -117,6 +117,7 @@ function MainContainer() {
       tempInfo.application_data.jobs[`${_id}`] = {
         id: `${_id}`,
         content: company,
+        position: position,
       };
       for (let col in tempInfo.application_data.columns) {
         if (tempInfo.application_data.columns[col].title === status) {
@@ -126,7 +127,6 @@ function MainContainer() {
 
       setUserInfo(tempInfo);
       setOpenModal(false);
-      console.log("after adding", userInfo);
     }
   }
   async function register() {
@@ -231,7 +231,6 @@ function MainContainer() {
 
   useEffect(() => {
     updateBoard();
-    console.log("after deletion", userInfo);
   }, [deleteJob]);
 
   async function checkLogin() {
@@ -268,6 +267,8 @@ function MainContainer() {
                     marginTop: "10px",
                     "&:hover": {
                       cursor: "pointer",
+                      color: "red",
+                      transition: "color 0.3s ease",
                     },
                   }}
                   onClick={() => {
@@ -288,13 +289,23 @@ function MainContainer() {
                   <Typography
                     sx={{
                       color: "#050A30",
+                      "&:hover": {
+                        transition: "color 0.3s ease",
+                      },
                     }}
                     variant="h5"
                   >
                     Login
                   </Typography>
                 ) : (
-                  <Typography variant="h5">Register</Typography>
+                  <Typography
+                    sx={{
+                      color: "#050A30",
+                    }}
+                    variant="h5"
+                  >
+                    Register
+                  </Typography>
                 )}
 
                 <Box
@@ -354,6 +365,10 @@ function MainContainer() {
                           backgroundColor: "#233DFF",
                           width: "80%",
                           borderRadius: "20px",
+                          "&:hover": {
+                            backgroundColor: "#495EFA",
+                            transition: "background 0.3s ease",
+                          },
                         }}
                         onClick={login}
                       >
@@ -364,8 +379,13 @@ function MainContainer() {
                         <Button
                           variant="contained"
                           sx={{
+                            backgroundColor: "#233DFF",
                             width: "80%",
                             borderRadius: "20px",
+                            "&:hover": {
+                              backgroundColor: "#495EFA",
+                              transition: "background 0.3s ease",
+                            },
                           }}
                           onClick={register}
                         >
@@ -374,8 +394,13 @@ function MainContainer() {
                         <Button
                           variant="contained"
                           sx={{
+                            backgroundColor: "#233DFF",
                             width: "80%",
                             borderRadius: "20px",
+                            "&:hover": {
+                              backgroundColor: "#495EFA",
+                              transition: "background 0.3s ease",
+                            },
                           }}
                         >
                           <GoogleIcon></GoogleIcon>
@@ -387,9 +412,9 @@ function MainContainer() {
                       <Typography
                         sx={{
                           "&:hover": {
-                            color: "orange",
+                            color: "#5CB6F9",
                             cursor: "pointer",
-                            transition: "color 0.2s ease",
+                            transition: "color 0.3s ease",
                           },
                         }}
                         onClick={() => {
@@ -402,9 +427,9 @@ function MainContainer() {
                       <Typography
                         sx={{
                           "&:hover": {
-                            color: "orange",
+                            color: "#5CB6F9",
                             cursor: "pointer",
-                            transition: "color 0.2s ease",
+                            transition: "color 0.3s ease",
                           },
                         }}
                         onClick={() => {
@@ -431,6 +456,7 @@ function MainContainer() {
         </>
       ) : (
         <>
+          {/* modal to add jobs to kanban board */}
           <Modal className="kanban-add-job-modal" open={openModal}>
             <Box className="kanban-add-job-box">
               <Box
@@ -443,10 +469,13 @@ function MainContainer() {
               >
                 <CancelIcon
                   sx={{
+                    color: "#f50057",
                     marginRight: "10px",
                     marginTop: "10px",
                     "&:hover": {
                       cursor: "pointer",
+                      color: "red",
+                      transition: "color 0.3s ease",
                     },
                   }}
                   onClick={() => {
@@ -479,6 +508,7 @@ function MainContainer() {
                     sx={{
                       width: "90%",
                     }}
+                    required
                     label="Company"
                     variant="outlined"
                     onChange={updateCompany}
@@ -487,6 +517,7 @@ function MainContainer() {
                     sx={{
                       width: "90%",
                     }}
+                    required
                     label="Position"
                     variant="outlined"
                     onChange={updatePosition}
@@ -495,6 +526,7 @@ function MainContainer() {
                     sx={{
                       width: "90%",
                     }}
+                    required
                     value={status}
                     onChange={updateSelection}
                   >
@@ -504,16 +536,24 @@ function MainContainer() {
                     <MenuItem value="Offer">Offer</MenuItem>
                     <MenuItem value="Rejected">Rejected</MenuItem>
                   </Select>
+                  <Button
+                    sx={{
+                      marginTop: "10px",
+                      borderRadius: "30px",
+                      backgroundColor: "#050A30",
+                      paddingLeft: "20px",
+                      paddingRight: "20px",
+                      "&:hover": {
+                        backgroundColor: "#233DFF",
+                        transition: "background 0.3s ease",
+                      },
+                    }}
+                    variant="contained"
+                    onClick={addJob}
+                  >
+                    Create
+                  </Button>
                 </Box>
-              </Box>
-              <Box
-                sx={{
-                  height: "5%",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <Button onClick={addJob}>Create</Button>
               </Box>
             </Box>
           </Modal>
