@@ -29,7 +29,8 @@ function MainContainer() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modalLogin, setModalLogin] = useState(true);
-
+  const [deleteJob, setDeleteJob] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const [openModal, setOpenModal] = useState(true);
   const [userInfo, setUserInfo] = useState({
     logged_in: false,
@@ -99,7 +100,6 @@ function MainContainer() {
     if (result) {
       const { _id, company, position, note, status } = result.data;
       let targetColumn = "";
-      console.log(status);
 
       if (status === "Wish List") {
         targetColumn = "column-1";
@@ -123,8 +123,10 @@ function MainContainer() {
           tempInfo.application_data.columns[col].companyIds.push(`${_id}`);
         }
       }
+
       setUserInfo(tempInfo);
       setOpenModal(false);
+      console.log("after adding", userInfo);
     }
   }
   async function register() {
@@ -141,7 +143,6 @@ function MainContainer() {
     });
 
     if (result) {
-      console.log(result.data);
       const jobsParsed = {};
       const wishArray = [];
       const appliedArray = [];
@@ -211,6 +212,23 @@ function MainContainer() {
     }
   }
 
+  async function updateBoard(){
+    const tempInfo = userInfo;
+      delete tempInfo.application_data.jobs[`${deleteId}`]
+      for (let col in tempInfo.application_data.columns) {
+          if (tempInfo.application_data.columns[col].companyIds.includes(deleteId)){
+            tempInfo.application_data.columns[col].companyIds.splice(tempInfo.application_data.columns[col].companyIds.indexOf(deleteId), 1);
+          }
+      }
+      setUserInfo(tempInfo);
+      setDeleteJob(false);
+  }
+
+  useEffect(() => {
+    updateBoard();
+    console.log("after deletion", userInfo)
+  }, [deleteJob])
+
   async function checkLogin() {
     const result = await axios.get("/isLoggedIn");
     if (result.data.loggedin) {
@@ -218,17 +236,13 @@ function MainContainer() {
     }
   }
 
-  // edge case for logging out of website
-  useEffect(() => {
-    // checkLogin();
-  }, []);
 
   function updateName(event) {
     setName(event.target.value);
   }
 
   return (
-    <InfoContext.Provider value={[userInfo, setUserInfo]}>
+    <InfoContext.Provider value={[userInfo, setUserInfo, setDeleteJob, setDeleteId]}>
       {userInfo.logged_in === false ? (
         <>
           <Modal className="kanban-login-modal" open={openModal}>

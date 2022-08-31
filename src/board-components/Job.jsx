@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { InfoContext } from "../containers/MainContainer.jsx";
+import axios from "axios";
 
 const Container = styled.div`
   border: 1px solid lightgrey;
@@ -14,6 +17,15 @@ const Container = styled.div`
 `;
 
 export function Job(props) {
+  const [userInfo, setUserInfo, setDeleteJob, setDeleteId] = useContext(InfoContext);
+  async function deleteJob() {
+    const result = await axios.post("/delete", {
+      _id: props.job.id,
+    });
+    setDeleteJob(true);
+    setDeleteId(props.job.id)
+  }
+
   return (
     <Draggable draggableId={props.job.id + ""} index={props.index}>
       {(provided, snapshot) => (
@@ -22,8 +34,17 @@ export function Job(props) {
           {...provided.draggableProps}
           isDragging={snapshot.isDragging}
           {...provided.dragHandleProps}
+          data-test-id={props.job.id}
         >
           {props.job.content}
+          <CancelIcon
+            sx={{
+              "&:hover": {
+                cursor: "pointer",
+              },
+            }}
+            onClick={deleteJob}
+          ></CancelIcon>
         </Container>
       )}
     </Draggable>
