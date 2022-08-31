@@ -8,10 +8,11 @@
   "license": "ISC",
   "scripts": {
     "build": "webpack --config ./webpack.config.js",
-    "start": "nodemon ./server/server.js",
+    "start": "node ./server/server.js",
     "clean": "rm dist/bundle.js",
     "dev:hot": "NODE_ENV=development nodemon ./server/server.js & webpack-dev-server --open --hot",
     "dev-con": "concurrently \"cross-env NODE_ENV=development webpack serve\" \"cross-env NODE_ENV=development nodemon server/server.js\"",
+    "docker-dev:hot": "docker-compose -f docker-compose-dev-hot.yml up",
     "build-prod": "webpack --mode production",
     "win-dev2": "concurrently \"cross-env NODE_ENV=development nodemon server/server.js\" \"cross-env NODE_ENV=development webpack serve --open\"",
     "cypress:open": "cypress open",
