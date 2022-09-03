@@ -4,6 +4,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { Box } from "@mui/material";
 import { InfoContext } from "../containers/MainContainer.jsx";
+import axios from "axios";
 
 const Container = styled.div``;
 
@@ -18,7 +19,7 @@ const COLUMN_NAMES = [
 export function Board() {
   const [userInfo, setUserInfo] = useContext(InfoContext);
   const [data, setData] = useState(userInfo.application_data);
-  const [columnArray, setColumnArray] = useState([]);
+
   // update order once dragging ends
   function onDragEnd(result) {
     document.body.style.color = "inherit";
@@ -88,6 +89,11 @@ export function Board() {
         ...userInfo,
         application_data: newData,
       });
+
+      axios.put("/update", {
+        _id: finishTaskIds[0],
+        status: newFinish.title,
+      });
     }
   }
 
@@ -104,7 +110,11 @@ export function Board() {
             const jobs = column.companyIds.map((taskId) => data.jobs[taskId]);
             return (
               <Box className={`${COLUMN_NAMES[index]} kanban-columns`}>
-                <Column key={column.id} column={column} jobs={jobs}></Column>
+                <Column
+                  key={column.id + ""}
+                  column={column}
+                  jobs={jobs}
+                ></Column>
               </Box>
             );
           })}

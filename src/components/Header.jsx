@@ -1,43 +1,47 @@
 /* eslint-disable linebreak-style */
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Button } from "@mui/material";
-import logo from "../assets/logo.png";
+import logo from "../assets/mjt-logo.svg";
+import axios from "axios";
+import { InfoContext } from "../containers/MainContainer.jsx";
 
 function Header(props) {
+  const [userInfo, setUserInfo] = useContext(InfoContext);
+
+  async function logout() {
+    const result = await axios.get("/logout");
+    setUserInfo({
+      ...userInfo,
+      logged_in: false,
+    });
+  }
+
   return (
     <Box className="header">
-      <img src={logo} width="100px" />
-
-      <Box
-        sx={{
-          display: "flex",
-          width: "100%",
-          flexDirection: "row",
-          justifyContent: "flex-end",
-        }}
-      >
+      <img src={logo} width="230px" />
+      <Box className="button-outer">
         {props.userLoggedIn && (
-          <Box
-            sx={{
-              display: "flex",
-              width: "max-content",
-              gap: "10px",
-            }}
-          >
+          <Box className="button-container">
             <Button
-              sx={{
-                borderRadius: "50px",
-              }}
+              className="button-style"
               onClick={() => {
                 props.setOpenModal(true);
+              }}
+              sx={{
+                color: "#F4F6FC",
+                borderRadius: "30px",
               }}
             >
               Add Job
             </Button>
+
             <Button
               sx={{
-                borderRadius: "50px",
+                color: "#F4F6FC",
+                borderRadius: "30px",
               }}
+              className="button-style"
+              onClick={logout}
             >
               Logout
             </Button>
@@ -45,16 +49,13 @@ function Header(props) {
         )}
 
         {!props.userLoggedIn && (
-          <Box
-            sx={{
-              display: "flex",
-              width: "max-content",
-            }}
-          >
+          <Box className="button-container">
             <Button
               sx={{
-                borderRadius: "50px",
+                color: "#F4F6FC",
+                borderRadius: "30px",
               }}
+              className="button-style"
               onClick={() => {
                 props.setOpenModal(true);
               }}

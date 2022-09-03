@@ -16,17 +16,17 @@ div {
 
 /* containers */
 .outer-container {
-  background: #fff;
-  height: 98.5vh;
+  background: #fcfcfc;
+  height: 97.5vh;
   display: grid !important;
   grid-template-columns: 1fr;
   grid-template-rows: 80px 1fr 80px;
-  gap: 30px;
+  gap: 20px;
   grid-template-areas:
     "Header"
     "Kanban"
     "Footer";
-  padding: 30px;
+  padding: 20px;
 }
 
 .kanban-container {
@@ -45,40 +45,88 @@ div {
 .kanban-columns {
   border-left: 1px solid #f0f0f0;
   border-right: 1px solid #f0f0f0;
-  padding: 0px 20px;
   text-align: center;
 }
 
+.landing {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
 /* cards */
+.kanban-column-title {
+  background: #5e3b96;
+  color: #e3d5f9;
+  font-weight: 400;
+  letter-spacing: 2px;
+  margin: 0px 0px 5px 0px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
 .kanban-card {
   border: 1px solid #f3f3f3;
-  height: 125px;
-  padding: 10px;
+  margin: 10px 10px 20px 10px;
   box-shadow: 1px 0px 15px #00000015;
-  border-radius: 15px;
+  border-radius: 8px;
+  display: grid !important;
+  grid-template-columns: 1fr 30px;
+  grid-template-areas:
+    "Company Utility"
+    "Position Position";
+  grid-gap: 0px;
+  text-align: left;
+}
+
+.kanban-card:hover {
+  box-shadow: none;
+  transition: 0.5s;
+}
+
+.kanban-card-company {
+  grid-area: Company;
+  color: white;
+  background: #3b5096;
+  padding: 7px 0 5px 10px;
+  border-top-left-radius: 8px;
+}
+
+.kanban-card-position {
+  grid-area: Position;
+  padding: 10px;
+}
+
+.kanban-card-utility {
+  grid-area: Utility;
+  background: #3b5096;
+  padding: 7px 0 0 0;
+  border-top-right-radius: 8px;
   text-align: center;
-  display: grid;
-  align-items: center;
 }
 
 /* nav */
 .header {
-  background: #ececec;
+  background: #111b5b;
   grid-area: Header;
   display: flex;
   align-items: center;
   justify-items: center;
-  border-radius: 15px;
-  padding: 10px;
+  border-radius: 8px;
+  padding: 10px 15px;
 }
 
 .footer {
-  background: #ececec;
+  background-color: #111b5b;
+  color: #d1ddff;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   grid-area: Footer;
   display: grid;
   align-items: center;
   justify-items: center;
-  border-radius: 15px;
+  border-radius: 8px;
 }
 
 /* text styling */
@@ -108,7 +156,26 @@ h2.kanban-title {
 
 .kanban-login-box {
   width: 400px;
-  height: 50%;
+  height: 60%;
   background: white;
   border-radius: 20px;
+}
+
+/* button styling */
+
+.button-container {
+  display: flex;
+  width: max-content;
+  gap: 10px;
+}
+
+.button-outer {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.button-style {
+  border-radius: 50px;
 }

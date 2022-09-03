@@ -29,8 +29,9 @@ function MainContainer() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modalLogin, setModalLogin] = useState(true);
-
-  const [openModal, setOpenModal] = useState(true);
+  const [deleteJob, setDeleteJob] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
   const [userInfo, setUserInfo] = useState({
     logged_in: false,
     user_name: "",
@@ -69,25 +70,6 @@ function MainContainer() {
     },
   });
 
-  function updateJobs() {
-    // have to update according to the id of the backend
-    const tempInfo = userInfo;
-    const ranNum = Math.floor(Math.random() * 100);
-    tempInfo.application_data.jobs[`company-${ranNum}`] = {
-      id: `company-${ranNum}`,
-      content: company,
-    };
-
-    for (let col in tempInfo.application_data.columns) {
-      if (tempInfo.application_data.columns[col].title === status) {
-        tempInfo.application_data.columns[col].companyIds.push(
-          `company-${ranNum}`
-        );
-      }
-    }
-    setOpenModal(false);
-  }
-
   function updateEmail(event) {
     setEmail(event.target.value);
   }
@@ -108,22 +90,164 @@ function MainContainer() {
     setPosition(event.target.value);
   }
 
-  async function register(){
-    
-    const result = await axios.post('/register', {
+  async function addJob() {
+    const result = await axios.post("/add", {
+      position: position,
+      company: company,
+      status: status,
+    });
+
+    if (result) {
+      const { _id, company, position, note, status } = result.data;
+      let targetColumn = "";
+
+      if (status === "Wish List") {
+        targetColumn = "column-1";
+      } else if (status === "Applied") {
+        targetColumn = "column-2";
+      } else if (status === "Interview") {
+        targetColumn = "column-3";
+      } else if (status === "Offer") {
+        targetColumn = "column-4";
+      } else if (status === "Rejected") {
+        targetColumn = "column-5";
+      }
+
+      const tempInfo = userInfo;
+      tempInfo.application_data.jobs[`${_id}`] = {
+        id: `${_id}`,
+        content: company,
+        position: position,
+      };
+      for (let col in tempInfo.application_data.columns) {
+        if (tempInfo.application_data.columns[col].title === status) {
+          tempInfo.application_data.columns[col].companyIds.push(`${_id}`);
+        }
+      }
+
+      setUserInfo(tempInfo);
+      setOpenModal(false);
+    }
+  }
+  async function register() {
+    const result = await axios.post("/register", {
       name: name,
       email: email,
-      password: password
-    })
-    console.log(result);
+      password: password,
+    });
+  }
+  async function login() {
+    const result = await axios.post("/login", {
+      email: email,
+      password: password,
+    });
+
+    if (result) {
+      const jobsParsed = {};
+      const wishArray = [];
+      const appliedArray = [];
+      const interviewArray = [];
+      const offerArray = [];
+      const rejectedArray = [];
+      result.data.forEach((jobs) => {
+        const { _id, company, position, note, status } = jobs;
+        jobsParsed[_id] = {
+          id: _id,
+          content: company,
+          position: position,
+          note: note,
+        };
+
+        if (status === "Wish List") {
+          wishArray.push(_id);
+        } else if (status === "Applied") {
+          appliedArray.push(_id);
+        } else if (status === "Interview") {
+          interviewArray.push(_id);
+        } else if (status === "Offer") {
+          offerArray.push(_id);
+        } else if (status === "Rejected") {
+          rejectedArray.push(_id);
+        }
+      });
+
+      const tempInfo = {
+        ...userInfo,
+        logged_in: true,
+        application_data: {
+          ...userInfo.application_data,
+          jobs: jobsParsed,
+          columns: {
+            "column-1": {
+              id: "column-1",
+              title: "Wish List",
+              companyIds: wishArray,
+            },
+            "column-2": {
+              id: "column-2",
+              title: "Applied",
+              companyIds: appliedArray,
+            },
+            "column-3": {
+              id: "column-3",
+              title: "Interview",
+              companyIds: interviewArray,
+            },
+            "column-4": {
+              id: "column-4",
+              title: "Offer",
+              companyIds: offerArray,
+            },
+            "column-5": {
+              id: "column-5",
+              title: "Rejected",
+              companyIds: rejectedArray,
+            },
+          },
+        },
+      };
+
+      setUserInfo(tempInfo);
+      setOpenModal(false);
+    }
   }
 
-  function updateName(event){
-    setName(event.target.value)
+  async function updateBoard() {
+    const tempInfo = userInfo;
+    delete tempInfo.application_data.jobs[`${deleteId}`];
+    for (let col in tempInfo.application_data.columns) {
+      if (
+        tempInfo.application_data.columns[col].companyIds.includes(deleteId)
+      ) {
+        tempInfo.application_data.columns[col].companyIds.splice(
+          tempInfo.application_data.columns[col].companyIds.indexOf(deleteId),
+          1
+        );
+      }
+    }
+    setUserInfo(tempInfo);
+    setDeleteJob(false);
+  }
+
+  useEffect(() => {
+    updateBoard();
+  }, [deleteJob]);
+
+  async function checkLogin() {
+    const result = await axios.get("/isLoggedIn");
+    if (result.data.loggedin) {
+      const result = await axios.get("/getJobs");
+    }
+  }
+
+  function updateName(event) {
+    setName(event.target.value);
   }
 
   return (
-    <InfoContext.Provider value={[userInfo, setUserInfo]}>
+    <InfoContext.Provider
+      value={[userInfo, setUserInfo, setDeleteJob, setDeleteId]}
+    >
       {userInfo.logged_in === false ? (
         <>
           <Modal className="kanban-login-modal" open={openModal}>
@@ -138,10 +262,13 @@ function MainContainer() {
               >
                 <CancelIcon
                   sx={{
+                    color: "#f50057",
                     marginRight: "10px",
                     marginTop: "10px",
                     "&:hover": {
                       cursor: "pointer",
+                      color: "red",
+                      transition: "color 0.3s ease",
                     },
                   }}
                   onClick={() => {
@@ -159,9 +286,26 @@ function MainContainer() {
                 }}
               >
                 {modalLogin ? (
-                  <Typography variant="h5">Login</Typography>
+                  <Typography
+                    sx={{
+                      color: "#050A30",
+                      "&:hover": {
+                        transition: "color 0.3s ease",
+                      },
+                    }}
+                    variant="h5"
+                  >
+                    Login
+                  </Typography>
                 ) : (
-                  <Typography variant="h5">Register</Typography>
+                  <Typography
+                    sx={{
+                      color: "#050A30",
+                    }}
+                    variant="h5"
+                  >
+                    Register
+                  </Typography>
                 )}
 
                 <Box
@@ -175,22 +319,23 @@ function MainContainer() {
                     gap: "5px",
                   }}
                 >
-                  {!modalLogin && 
-                  <TextField
-                    sx={{
-                      width: "90%",
-                    }}
-                    label="Name"
-                    variant="outlined"
-                    onChange={updateName}
-                  >
-                  </TextField>}
+                  {!modalLogin && (
+                    <TextField
+                      sx={{
+                        width: "90%",
+                      }}
+                      label="Name"
+                      variant="outlined"
+                      onChange={updateName}
+                    ></TextField>
+                  )}
                   <TextField
                     sx={{
                       width: "90%",
                     }}
                     label="Email"
                     variant="outlined"
+                    required
                     onChange={updateEmail}
                   ></TextField>
                   <TextField
@@ -199,6 +344,7 @@ function MainContainer() {
                     }}
                     label="Password"
                     variant="outlined"
+                    required
                     type="password"
                     onChange={updatePassword}
                   ></TextField>
@@ -216,9 +362,15 @@ function MainContainer() {
                       <Button
                         variant="contained"
                         sx={{
+                          backgroundColor: "#233DFF",
                           width: "80%",
                           borderRadius: "20px",
+                          "&:hover": {
+                            backgroundColor: "#495EFA",
+                            transition: "background 0.3s ease",
+                          },
                         }}
+                        onClick={login}
                       >
                         Login
                       </Button>
@@ -227,8 +379,13 @@ function MainContainer() {
                         <Button
                           variant="contained"
                           sx={{
+                            backgroundColor: "#233DFF",
                             width: "80%",
                             borderRadius: "20px",
+                            "&:hover": {
+                              backgroundColor: "#495EFA",
+                              transition: "background 0.3s ease",
+                            },
                           }}
                           onClick={register}
                         >
@@ -237,8 +394,13 @@ function MainContainer() {
                         <Button
                           variant="contained"
                           sx={{
+                            backgroundColor: "#233DFF",
                             width: "80%",
                             borderRadius: "20px",
+                            "&:hover": {
+                              backgroundColor: "#495EFA",
+                              transition: "background 0.3s ease",
+                            },
                           }}
                         >
                           <GoogleIcon></GoogleIcon>
@@ -250,9 +412,9 @@ function MainContainer() {
                       <Typography
                         sx={{
                           "&:hover": {
-                            color: "orange",
+                            color: "#5CB6F9",
                             cursor: "pointer",
-                            transition: "color 0.2s ease",
+                            transition: "color 0.3s ease",
                           },
                         }}
                         onClick={() => {
@@ -265,9 +427,9 @@ function MainContainer() {
                       <Typography
                         sx={{
                           "&:hover": {
-                            color: "orange",
+                            color: "#5CB6F9",
                             cursor: "pointer",
-                            transition: "color 0.2s ease",
+                            transition: "color 0.3s ease",
                           },
                         }}
                         onClick={() => {
@@ -294,6 +456,7 @@ function MainContainer() {
         </>
       ) : (
         <>
+          {/* modal to add jobs to kanban board */}
           <Modal className="kanban-add-job-modal" open={openModal}>
             <Box className="kanban-add-job-box">
               <Box
@@ -306,10 +469,13 @@ function MainContainer() {
               >
                 <CancelIcon
                   sx={{
+                    color: "#f50057",
                     marginRight: "10px",
                     marginTop: "10px",
                     "&:hover": {
                       cursor: "pointer",
+                      color: "red",
+                      transition: "color 0.3s ease",
                     },
                   }}
                   onClick={() => {
@@ -342,6 +508,7 @@ function MainContainer() {
                     sx={{
                       width: "90%",
                     }}
+                    required
                     label="Company"
                     variant="outlined"
                     onChange={updateCompany}
@@ -350,6 +517,7 @@ function MainContainer() {
                     sx={{
                       width: "90%",
                     }}
+                    required
                     label="Position"
                     variant="outlined"
                     onChange={updatePosition}
@@ -358,6 +526,7 @@ function MainContainer() {
                     sx={{
                       width: "90%",
                     }}
+                    required
                     value={status}
                     onChange={updateSelection}
                   >
@@ -367,16 +536,24 @@ function MainContainer() {
                     <MenuItem value="Offer">Offer</MenuItem>
                     <MenuItem value="Rejected">Rejected</MenuItem>
                   </Select>
+                  <Button
+                    sx={{
+                      marginTop: "10px",
+                      borderRadius: "30px",
+                      backgroundColor: "#050A30",
+                      paddingLeft: "20px",
+                      paddingRight: "20px",
+                      "&:hover": {
+                        backgroundColor: "#233DFF",
+                        transition: "background 0.3s ease",
+                      },
+                    }}
+                    variant="contained"
+                    onClick={addJob}
+                  >
+                    Create
+                  </Button>
                 </Box>
-              </Box>
-              <Box
-                sx={{
-                  height: "5%",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <Button onClick={updateJobs}>Create</Button>
               </Box>
             </Box>
           </Modal>
