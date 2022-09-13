@@ -16,7 +16,10 @@
     "build-prod": "webpack --mode production",
     "win-dev2": "concurrently \"cross-env NODE_ENV=development nodemon server/server.js\" \"cross-env NODE_ENV=development webpack serve --open\"",
     "cypress:open": "cypress open",
-    "test": "jest"
+    "test": "jest",
+    "cypress:test": "npm run dev & cypress run",
+    "cypress": "npm run cypress:test && npm run kill",
+    "kill": "npx kill-port 3000 & npx kill-port 8080"
   },
   "dependencies": {
     "@emotion/react": "^11.10.0",
