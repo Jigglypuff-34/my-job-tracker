@@ -1,14 +1,16 @@
 const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
 dotenv.config();
-const PORT = process.env.PORT || 3000;
+const logger = require('morgan');
+const PORT = process.env.PORT || '3000';
 const express = require('express');
 const controller = require('./controller');
 
 const app = express();
 
+app.use(logger(':date[clf] :method :url :status :response-time ms - :res[content-length]'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());

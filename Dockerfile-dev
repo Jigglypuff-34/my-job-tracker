@@ -1,0 +1,7 @@
+FROM node:16.15.0
+WORKDIR /usr/src/app
+RUN npm install --save-dev webpack
+COPY package*.json /usr/src/app
+RUN npm install
+RUN npm i framer-motion
+EXPOSE 3000
